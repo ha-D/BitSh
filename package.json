@@ -7,6 +7,11 @@
 		"npm":  "1.2.x"
 	},
 	"dependencies": {
-		"express": "latest"
-	}
+		"express": "latest",
+		"mongoose": "latest",
+		"connect-mongo": "latest"
+	},
+	"devDependencies": {
+    	"nodemon": "latest"
+  	}
 }

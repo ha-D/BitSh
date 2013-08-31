@@ -1,8 +1,13 @@
 var express = require('express')
   , fs 		= require('fs')	
-  , config  = require('./config/config')
-  // , mongoose = require('mongoose')
 
+var config   = require('./config/config')
+  , mongoose = require('mongoose')
+
+console.log(config.db)
+
+// Bootstrap db connection
+mongoose.connect(config.db)
 
 // Bootstrap models
 var models_path = __dirname + '/app/models'
