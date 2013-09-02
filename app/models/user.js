@@ -29,6 +29,11 @@ UserSchema.path('email').validate(function(email){
 	return email.length
 }, "Email cannot be blank")
 
+UserSchema.path("hashed_password").validate(function(hashed_password){
+	return hashed_password.length
+}, "Password required")
+
+
 // UserSchema.path('email').validate(function(email, ))
 
 UserSchema.methods = {
