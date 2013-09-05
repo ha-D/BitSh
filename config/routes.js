@@ -2,14 +2,16 @@
 var main = require("../app/controllers/main")
   , user = require("../app/controllers/user")
 
-module.exports = function(app){
-	app.get('/', main._index)
-
-	app.get('/login', main._login)
-
-	app.post('/signup', user.signup)
-
-	app.get('/signout', user.signout)
-
-	app.get('/userinfo', user.userInfo)
+exports.init = function(app){
+	app.get('/', main._index);
+	app.post('/', main.doAction);
 }
+
+exports.actions = {
+	'user_signup':  user.signup,
+	'user_signin':  user.signin,
+	'user_signout': user.signout,
+	'user_info':    user._info
+}
+
+module.exports = exports

@@ -18,7 +18,9 @@ fs.readdirSync(models_path).forEach(function (file) {
 var app = express()
 
 require('./config/express')(app, config)
-require('./config/routes')(app)
+require('./config/routes').init(app)
+
+
 
 var port = 8080
 app.listen(port)

@@ -5,12 +5,13 @@ var User = require("../models/user")
  * and gives req apropiate message 
  */
 function checkUser(action, req, res){
-	if (req.session.userId == undefined) {
+	if (req.session.userId === undefined) {
 		res.json({
 			action: action,
 			state: "fail",
 			error: {
-				message: "User not signed in"
+				message: "User not signed in",
+				name: "UserError"
 			}
 		});
 		return false;
@@ -44,7 +45,7 @@ exports.userInfo = function(req, res){
 }
 
 exports.signup = function(req, res){
-	user = new User(req.body)
+	user = new User(req.data.form)
 	user.save(function(err){
 		if(err){
 			res.json({
@@ -54,7 +55,7 @@ exports.signup = function(req, res){
 				user: { "_id": user.id }
 			})
 		}else{
-			req.session.userId = user.id
+		//	req.session.userId = user.id
 			res.json({
 				action: "signup",
 				state: "success",
@@ -62,6 +63,45 @@ exports.signup = function(req, res){
 			})
 		}
 	})
+}
+
+exports.signin = function(req, res){
+	if (req.session.userId !== undefined) {
+		res.json({
+			action: "user_signin",
+			state: "fail",
+			error: {
+				message: "User already signed in",
+				name: "UserError"
+			}
+		});
+		return;
+	}
+
+	email = req.data.form.email;
+	pass  = req.data.form.password;
+
+	User.findOne({ 'email': email }, function(err, user){
+		if (user == null || !user.authenticate(pass)){
+			res.json({
+				action: "user_signin",
+				state: "fail",
+				error: {
+					message: "Invalid email or password",
+					name: "SignInError"
+				}
+			});
+		}else{
+			req.session.userId = user._id;
+			res.json({
+				action: "user_signin",
+				state: "success",
+				user: {
+					_id: user._id
+				}
+			})
+		}
+	});
 }
 
 exports.signout = function(req, res){

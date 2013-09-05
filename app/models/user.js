@@ -11,6 +11,9 @@ var UserSchema = new Schema({
 	salt: {type: String, default: ''}
 })
 
+UserSchema.index({_id: 1, email: 1});
+
+UserSchema.set('autoIndex', false);
 
 UserSchema.virtual('password')
 	.set(function(password){
