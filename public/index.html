@@ -19,6 +19,12 @@
 				</textarea>
 				<button type="submit"> Send </button>
 			</form>
+
+			<form action="/" method="post" enctype="multipart/form-data">
+				<input name="torrent_file" type="file">Upload</input>
+				<input name="submit" type="submit"/>
+				<input name="data" type="hidden" value='{"action":"torrent_upload", "form": {"name":"sth", "tags":["asdf", "ad"]}}' />
+			</form>
 		</div>
 	</body>
 </html>

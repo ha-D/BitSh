@@ -19,6 +19,8 @@ function checkUser(action, req, res){
 	return true;
 }
 
+exports.checkUser = checkUser;
+
 exports.userInfo = function(req, res){
 	if (!checkUser('user_info', req, res))
 		return;
@@ -114,3 +116,5 @@ exports.signout = function(req, res){
 		state: "success"
 	});
 }
+
+module.exports = exports;

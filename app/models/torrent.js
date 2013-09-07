@@ -24,7 +24,7 @@ var TorrentSchema = new Schema({
 		},
 		text: String
 	}],
-	torrent: {type: ObjectId, ref: 'TorrentData'}
+	torrent: {type: String, ref: 'TorrentData'}
 });
 
 mongoose.model('Torrent', TorrentSchema)
