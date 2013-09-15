@@ -16,18 +16,37 @@ exports.upload = function(req, res){
 	
 	fs.readFile(req.files.torrent_file.path, function(err, file){
 		var tData = Bencode.decode(file, 'ascii');
-		
+		// fs.writeFile("/home/hadi/Desktop/tmp.torrent", Bencode.encode(tData), function(err){
+		// 	console.log(err);
+		// });
+
 		tData.announce_list = tData['announce-list'];
 		tData.created_by = tData['created by'];
 		tData.creation_date = tData['creation_date'];
 		tData.info.piece_length = tData.info['piece length'];
+
+
 		delete tData['announce-list'];
 		delete tData['created by'];
 		delete tData['creation date'];
 		delete tData.info['piece length'];
 
+
+		// TODO No need for this, just fix 'piece length' space problem
+		/*
+			Fix order of keys in info dict to get correct SHA1
+			Not really doing a good thing here, but works for now
+		*/
+		var tmpData = Object()
+		tmpData['files'] = tData.info.files;
+		tmpData['name'] = tData.info.name;
+		tmpData['pieces'] = tData.info.pieces;
+		tmpData['piece length'] = tData.info.piece_length;
+
+
+
 		var sha = crypto.createHash('sha1');
-		sha.update(Bencode.encode(tData.info))
+		sha.update(Bencode.encode(tmpData))
 		infoHash = sha.digest('hex');
 
 		tData._id = infoHash;
@@ -90,9 +109,11 @@ exports.download = function(req, res){
 		tData['creation date'] = tData.creation_date;
 		tData.info['piece length'] = tData.info.piece_length;
 
-		tData = _.omit(tData, 'announce_list', 'created_by', 'creation_date', 'info.piece_length')
+		tData.info = _.omit(tData.info, 'piece_length');
+		tData = _.omit(tData, 'announce_list', 'created_by', 'creation_date');
 
-		res.set('content-type', 'application/x-bittorrent');
+		res.set('Content-disposition' , 'inline; filename="' + tData.info.name + '.torrent"');
+		res.set('Content-type', 'application/x-bittorrent');
 		res.send(Bencode.encode(tData));
 	});
 }

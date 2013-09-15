@@ -8,6 +8,7 @@ var TorrentDataSchema = new Schema({
 	info: {
 		piece_length: Number,
 		pieces: String,
+		//private: {type: String, enum: {'none', 'private', 'public'}},
 		private: Boolean,
 		name: String,
 		files: [{

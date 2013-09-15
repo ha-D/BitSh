@@ -3,7 +3,7 @@ var Torrent  = require('../models/torrent')
   , UTStatus = require('../models/utstatus')
   , Bencode  = require('bencode')
   , _        = require('underscore')
-  , Buffer   = require('buffer')
+  //, Buffer   = require('buffer')
 
 function finalizePeer(userId, torrentId, peer){
 	UTStatus.update(
@@ -30,6 +30,10 @@ function sendPeerList(req, res){
 	if (numwant == null)
 		numwant = 50;
 
+
+
+	console.log(req.query);
+	
 	Torrent
 	.findOne({_id: req.query.info_hash})
 	.select('seeder_count leecher_count completed_count')
@@ -53,11 +57,14 @@ function sendPeerList(req, res){
 				
 				// Make compact peer list
 
+				var byteCount = 0;
 				var buf = _.reduce(peers, function(buf, peer){
 					ip = _.map(peer.ip.split('.'), parseInt)
-					_.each(ip, buf.write);
-					buf.write(peer.port >> 8);
-					buf.write(peer.port - ((peer.port >> 8) << 8));
+					_.each(ip, function(x){
+						buf.write(x, byteCount++);
+					});
+					buf.write(peer.port >> 8, byteCount++);
+					buf.write(peer.port - ((peer.port >> 8) << 8), byteCount++);
 				}, new Buffer(peers.length * 6));
 
 				peers = buf.toString();
@@ -83,6 +90,7 @@ function sendPeerList(req, res){
 }
 
 function updatePeer(req, res){
+
 	ev = req.query.event;
 	userId = req.params.userId;
 
@@ -166,6 +174,23 @@ function updatePeer(req, res){
 }
 
 exports.announce = function(req, res){
+	// TODO validate query
+
+	//console.log(req.query.info_hash);
+	var hash_buf = unescape(req.query.info_hash);
+	var info_hash = new Buffer(40, 'ascii');
+	for (var i = 0; i < 20; i+=1){
+		var s = hash_buf[i].charCodeAt().toString(16);
+		if (s.length == 1){
+			info_hash.write('0', i*2);		
+			info_hash.write( s, i*2 + 1);
+		}else{
+			info_hash.write(hash_buf[i].charCodeAt().toString(16), i*2);
+		}
+	}
+	req.query.info_hash = info_hash.toString();
+	console.log(req.query.info_hash);
+
 	sendPeerList(req, res);
 	updatePeer(req, res);
 }

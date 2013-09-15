@@ -25,6 +25,29 @@
 				<input name="submit" type="submit"/>
 				<input name="data" type="hidden" value='{"action":"torrent_upload", "form": {"name":"sth", "tags":["asdf", "ad"]}}' />
 			</form>
+
+			<form action="/" method="post">
+				<input name="data" type="hidden" value='{
+"action" : "user_signin",
+"form":  {
+"name": "mamad",
+"email": "mamad@gmail.com",
+"password": "123"
+}
+}'>  </input>
+			<input type="submit"> Signin</input>
+			</form>
+			<form action="/" method="post">
+				<input name="data" type="hidden" value='
+{
+"action":"torrent_download",
+"form":{
+ "torrent_id":"94c11550bdc5d2117da3e22aed302108380aa9ec"
+ }
+}'>  </input>
+			<input type="submit"> Download</input>
+			</form>
+
 		</div>
 	</body>
 </html>
