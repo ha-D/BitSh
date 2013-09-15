@@ -173,10 +173,10 @@ function updatePeer(req, res){
 	});
 }
 
-exports.announce = function(req, res){
-	// TODO validate query
+function validateInfoHash(req, res){
+	if (req.query.info_hash == null)
+		return false;
 
-	//console.log(req.query.info_hash);
 	var hash_buf = unescape(req.query.info_hash);
 	var info_hash = new Buffer(40, 'ascii');
 	for (var i = 0; i < 20; i+=1){
@@ -189,8 +189,41 @@ exports.announce = function(req, res){
 		}
 	}
 	req.query.info_hash = info_hash.toString();
+
+	return true;
+}
+
+function AnnounceException(message){
+	this.message = message;
+}
+
+function validateQuery(req, res){
+	try{
+		if (req.params.userId == null)
+			throw new AnnounceException("No user specified with torrent. Please download from site");
+		if (!validateInfoHash(req, res))
+			throw new AnnounceException("No info hash given in request query");
+		if (req.query.port == null)
+			throw new AnnounceException("No port number given in request query");
+		return true;
+	}catch(err){
+		if (err instanceof AnnounceException)
+			throw err;
+		res.send(Bencode.encode({
+			"failure reason": err.message
+		}));
+		return false;
+	}
+}
+
+exports.announce = function(req, res){
+	//console.log(req.query.info_hash);
+	
 	console.log(req.query.info_hash);
 
+	if (!validateQuery(req, res))
+		return;
+	
 	sendPeerList(req, res);
 	updatePeer(req, res);
 }
