@@ -40,15 +40,15 @@ function announceErrorWrapper(req, res, fun){
 				"failure reason": err.message
 			}));
 
-			logger.error("announce [%d] failed: %s", req.requestId, err.message);
+			logger.error("announce [%d] failed: %s\n%s", req.requestId, err.message, err.stack);
 		}
 	}
 }
 
 /*
- * Updates the torrent assigned to the peer with the peer stats.
- * This function doesn't remove the peer from the database, that
- * should be done manually if needed
+ *	Updates the torrent assigned to the peer with the peer stats.
+ *	This function doesn't remove the peer from the database, that
+ *	should be done manually if needed
  */
 function finalizePeer(userId, torrentId, peer){
 	UTStatus.update(
@@ -82,16 +82,17 @@ function makePeerList(req, res, peers){
 		var buf = _.reduce(peers, function(buf, peer){
 			ip = _.map(peer.ip.split('.'), parseInt)
 			_.each(ip, function(x){
-				buf.write(x, byteCount++);
+				buf.write(String.fromCharCode(x), byteCount++);
 			});
-			buf.write(peer.port >> 8, byteCount++);
-			buf.write(peer.port - ((peer.port >> 8) << 8), byteCount++);
+			buf.write(String.fromCharCode(peer.port >> 8), byteCount++);
+			buf.write(String.fromCharCode(peer.port - ((peer.port >> 8) << 8)), byteCount++);
+			return buf;
 		}, new Buffer(peers.length * 6));
 
-		peers = buf.toString();
+		formatedPeers = buf.toString();
 
 	} else {
-		peers = _.map(peers, function(peer){
+		formatedPeers = _.map(peers, function(peer){
 			return {
 				"peer id": peer.peer_id,
 				"ip": peer.ip,
@@ -100,7 +101,8 @@ function makePeerList(req, res, peers){
 		});
 	}
 
-	return peers;
+	logger.debug("announce [%d] sending %d peers", req.requestId, peers.length);
+	return formatedPeers;
 }
 
 /*
@@ -116,7 +118,7 @@ function sendPeerList(req, res){
 			throw new AnnounceError('Torrent does not exist in the database');
 		
 		Peer
-		.find({torrent: req.query.info_hash})
+		.find({torrent: req.query.info_hash, peer_id: {$ne: req.query.peer_id}})
 		.select('peer_id ip port')
 		.exec(announceErrorWrapper(req, res, function(err, peers){
 			peers = makePeerList(req, res, peers);
@@ -149,7 +151,7 @@ function eventStart(req, res, peer){
 	peer.user = userId;
 	peer.donwload = req.query.downloaded;
 	peer.upload = req.query.uploaded;
-	peer.ip = req.connection.remoteAddress;
+	peer.ip = req.query.ip;
 	peer.port = req.query.port;
 
 
@@ -191,7 +193,7 @@ function updatePeer(req, res){
 	.findOne({torrent: req.query.info_hash, peer_id: req.query.peer_id})
 	.exec(announceErrorWrapper(req, res, function(err, peer){
 		ev = req.query.event;
-		userId = req.params.userId;
+		userId = req.query.userId;
 
 		if (ev === 'started'){
 			logger.info("announce [%d] event: started", req.requestId);
@@ -263,6 +265,9 @@ function validateQuery(req, res){
 
 	if (req.params.userId == null)
 		throw new AnnounceError("No user specified with torrent. Please download from site");
+	else
+		req.query.userId = req.params.userId;
+
 	if (!validateInfoHash(req, res))
 		throw new AnnounceError("No info hash given in request query");
 	if (req.query.port == null)
@@ -273,12 +278,19 @@ function validateQuery(req, res){
 	else
 		req.query.numwant = parseInt(req.query.numwant);
 	
+	/* Retrieve IP */
+	req.query.ip = req.connection.remoteAddress;
 }
 
 exports.announce = function(req, res){	
 
 	var announceHandler = announceErrorWrapper(req, res, function(){
 		validateQuery(req, res);
+
+		logger.info('announce [%d] recieved (ip: %s, user: %s, peer_id: %s, info_hash: %s)', 
+			requestCount, req.query.ip, req.query.userId, req.query.peer_id, req.query.info_hash);
+
+		req.requestId = requestCount++;
 
 		/* Check user id exists */
 		User
@@ -287,13 +299,11 @@ exports.announce = function(req, res){
 			if (user == null)
 				throw new AnnounceError("Invalid announce url. User id does not exist");
 
-			sendPeerList(req, res);
+			if (req.query.event != 'stopped')
+				sendPeerList(req, res);
 			updatePeer(req, res);
 		}));
 	});
-
-	logger.info('announce [%d] recieved', requestCount);
-	req.requestId = requestCount++;
 
 	announceHandler();	
 }
