@@ -6,6 +6,7 @@ var Torrent  = require('../models/torrent')
   , _        = require('underscore')
   , util 	 = require('util')
   , zutil	 = require('../../lib/util')
+  , logger   = require('../../lib/log')('tracker')
 
 /*	TODO
     
@@ -21,13 +22,16 @@ function AnnounceError(message){
 util.inherits(AnnounceError, zutil.AppError);
 AnnounceError.prototype.message = "Tracker Error";
 
+
+var requestCount = 1;
+
 /*
  *	Returns a wrapper function for functions used in handling announce request
  *  Returned function handles errors and returns appropiate response to client
  *  so all announce related functions that return a response should be called 
  *  through this wrapper
  */
-function announceErrorWrapper(res, fun){
+function announceErrorWrapper(req, res, fun){
 	return function(){
 		try{
 			fun.apply(this, arguments);
@@ -35,6 +39,8 @@ function announceErrorWrapper(res, fun){
 			res.send(Bencode.encode({
 				"failure reason": err.message
 			}));
+
+			logger.error("announce [%d] failed: %s", req.requestId, err.message);
 		}
 	}
 }
@@ -104,7 +110,7 @@ function sendPeerList(req, res){
 	Torrent
 	.findOne({_id: req.query.info_hash})
 	.select('seeder_count leecher_count completed_count')
-	.exec(announceErrorWrapper(res, function(err, torrent){
+	.exec(announceErrorWrapper(req, res, function(err, torrent){
 
 		if (torrent == null)
 			throw new AnnounceError('Torrent does not exist in the database');
@@ -112,7 +118,7 @@ function sendPeerList(req, res){
 		Peer
 		.find({torrent: req.query.info_hash})
 		.select('peer_id ip port')
-		.exec(announceErrorWrapper(res, function(err, peers){
+		.exec(announceErrorWrapper(req, res, function(err, peers){
 			peers = makePeerList(req, res, peers);
 
 			res.send(Bencode.encode({
@@ -183,17 +189,20 @@ function eventStart(req, res, peer){
 function updatePeer(req, res){
 	Peer
 	.findOne({torrent: req.query.info_hash, peer_id: req.query.peer_id})
-	.exec(announceErrorWrapper(res, function(err, peer){
+	.exec(announceErrorWrapper(req, res, function(err, peer){
 		ev = req.query.event;
 		userId = req.params.userId;
 
-		if (ev === 'started')
+		if (ev === 'started'){
+			logger.info("announce [%d] event: started", req.requestId);
 			peer = eventStart(req, res, peer);
+		}
 
 		if(peer == null)
 			throw new AnnounceError('No start event recieved for this torrent');
 
 		if (ev === 'stopped'){
+			logger.info("announce [%d] event: stopped", req.requestId);
 			finalizePeer(userId, req.query.info_hash, peer);
 			peer.remove();
 			res.send("");
@@ -202,6 +211,7 @@ function updatePeer(req, res){
 		}
 
 		if (ev === 'completed'){
+			logger.info("announce [%d] event: completed", req.requestId);
 			peer.completed = true;	
 
 			UTStatus.update(
@@ -267,13 +277,13 @@ function validateQuery(req, res){
 
 exports.announce = function(req, res){	
 
-	var announceHandler = announceErrorWrapper(res, function(){
+	var announceHandler = announceErrorWrapper(req, res, function(){
 		validateQuery(req, res);
 
 		/* Check user id exists */
 		User
 		.findOne({_id: req.params.userId})
-		.exec(announceErrorWrapper(res, function(err, user){
+		.exec(announceErrorWrapper(req, res, function(err, user){
 			if (user == null)
 				throw new AnnounceError("Invalid announce url. User id does not exist");
 
@@ -281,6 +291,9 @@ exports.announce = function(req, res){
 			updatePeer(req, res);
 		}));
 	});
+
+	logger.info('announce [%d] recieved', requestCount);
+	req.requestId = requestCount++;
 
 	announceHandler();	
 }

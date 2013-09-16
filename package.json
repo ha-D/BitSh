@@ -11,7 +11,8 @@
 		"mongoose": "latest",
 		"connect-mongo": "latest",
 		"underscore": "latest",
-		"bencode": "latest"
+		"bencode": "latest",
+		"winston": "latest"
 	},
 	"devDependencies": {
     	"nodemon": "latest"
