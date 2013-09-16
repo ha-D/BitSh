@@ -27,7 +27,7 @@ AnnounceError.prototype.message = "Tracker Error";
  *  so all announce related functions that return a response should be called 
  *  through this wrapper
  */
-function announceErrorWrapper(fun){
+function announceErrorWrapper(res, fun){
 	return function(){
 		try{
 			fun.apply(this, arguments);
@@ -104,7 +104,7 @@ function sendPeerList(req, res){
 	Torrent
 	.findOne({_id: req.query.info_hash})
 	.select('seeder_count leecher_count completed_count')
-	.exec(announceErrorWrapper(function(err, torrent){
+	.exec(announceErrorWrapper(res, function(err, torrent){
 
 		if (torrent == null)
 			throw new AnnounceError('Torrent does not exist in the database');
@@ -112,7 +112,7 @@ function sendPeerList(req, res){
 		Peer
 		.find({torrent: req.query.info_hash})
 		.select('peer_id ip port')
-		.exec(announceErrorWrapper(function(err, peers){
+		.exec(announceErrorWrapper(res, function(err, peers){
 			peers = makePeerList(req, res, peers);
 
 			res.send(Bencode.encode({
@@ -183,7 +183,7 @@ function eventStart(req, res, peer){
 function updatePeer(req, res){
 	Peer
 	.findOne({torrent: req.query.info_hash, peer_id: req.query.peer_id})
-	.exec(announceErrorWrapper(function(err, peer){
+	.exec(announceErrorWrapper(res, function(err, peer){
 		ev = req.query.event;
 		userId = req.params.userId;
 
@@ -267,13 +267,13 @@ function validateQuery(req, res){
 
 exports.announce = function(req, res){	
 
-	var announceHandler = announceErrorWrapper(function(){
+	var announceHandler = announceErrorWrapper(res, function(){
 		validateQuery(req, res);
 
 		/* Check user id exists */
 		User
 		.findOne({_id: req.params.userId})
-		.exec(announceErrorWrapper(function(err, user){
+		.exec(announceErrorWrapper(res, function(err, user){
 			if (user == null)
 				throw new AnnounceError("Invalid announce url. User id does not exist");
 

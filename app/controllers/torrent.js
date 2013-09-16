@@ -101,7 +101,7 @@ exports.download = function(req, res){
 			return;
 		}
 
-		announce = "http://localhost:8080/tracker/announce/" + req.session.userId;
+		announce = "http://213.233.181.196:8080/tracker/announce/" + req.session.userId;
 
 		tData.announce = announce;
 		tData['announce list'] =  [ announce ];
