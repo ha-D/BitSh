@@ -7,7 +7,7 @@ var TorrentDataSchema = new Schema({
 	_id: String,
 	info: {
 		piece_length: Number,
-		pieces: String,
+		pieces: Buffer,
 		//private: {type: String, enum: {'none', 'private', 'public'}},
 		private: Boolean,
 		name: String,
@@ -21,7 +21,7 @@ var TorrentDataSchema = new Schema({
 	announce_list: [],
 	creation_date: Date,
 	comment: String,
-	create_by: String,
+	created_by: String,
 	encoding: String
 });
 

@@ -6,48 +6,30 @@ var Torrent 	= require('../models/torrent')
 var Bencode		= require('bencode')
   , fs 			= require('fs')
   , crypto      = require('crypto')
-  , _ 		= require('underscore')
+  , _ 		    = require('underscore')
 
 exports.upload = function(req, res){
 	var form = req.data.form;
 
-	if (!checkUser("torrent_upload", req, res))
+	if (!checkUser('torrent_upload', req, res))
 		return;
 	
 	fs.readFile(req.files.torrent_file.path, function(err, file){
-		var tData = Bencode.decode(file, 'ascii');
-		// fs.writeFile("/home/hadi/Desktop/tmp.torrent", Bencode.encode(tData), function(err){
-		// 	console.log(err);
-		// });
+		var tData = Bencode.decode(file);
+
+		var sha = crypto.createHash('sha1');
+		sha.update(Bencode.encode(tData.info));
+		infoHash = sha.digest('hex');
 
 		tData.announce_list = tData['announce-list'];
 		tData.created_by = tData['created by'];
-		tData.creation_date = tData['creation_date'];
+		tData.creation_date = tData['creation date'];
 		tData.info.piece_length = tData.info['piece length'];
-
 
 		delete tData['announce-list'];
 		delete tData['created by'];
 		delete tData['creation date'];
 		delete tData.info['piece length'];
-
-
-		// TODO No need for this, just fix 'piece length' space problem
-		/*
-			Fix order of keys in info dict to get correct SHA1
-			Not really doing a good thing here, but works for now
-		*/
-		var tmpData = Object()
-		tmpData['files'] = tData.info.files;
-		tmpData['name'] = tData.info.name;
-		tmpData['pieces'] = tData.info.pieces;
-		tmpData['piece length'] = tData.info.piece_length;
-
-
-
-		var sha = crypto.createHash('sha1');
-		sha.update(Bencode.encode(tmpData))
-		infoHash = sha.digest('hex');
 
 		tData._id = infoHash;
 		tData = TorrentData(tData);
@@ -69,6 +51,9 @@ exports.upload = function(req, res){
 
 		torrent = Torrent(torrent);
 
+		tData.markModified('info.name');
+		tData.markModified('info.pieces');
+
 		tData.save();
 		torrent.save();
 
@@ -86,8 +71,8 @@ exports.download = function(req, res){
 	var form = req.data.form;
 
 	TorrentData
-	.findOne({_id: form.torrent_id})  // TODO ADD PIECE LENGTH
-	.select('-_id -info.files._id -__v')// info.pieces info.private info.name info.files announce announce_list creation_date created_by encoded')
+	.findOne({_id: form.torrent_id})
+	.select('-_id -info.files._id -__v') // info.pieces info.private info.name info.files announce announce_list creation_date created_by encoded')
 	.lean()
 	.exec(function(err, tData){
 		if (tData == null){
@@ -103,10 +88,14 @@ exports.download = function(req, res){
 
 		announce = "http://213.233.181.196:8080/tracker/announce/" + req.session.userId;
 
+		tData.info.pieces = tData.info.pieces.buffer;
+
 		tData.announce = announce;
 		tData['announce list'] =  [ announce ];
-		tData['created by'] = tData.created_by;
-		tData['creation date'] = tData.creation_date;
+		if (tData.created_by)
+			tData['created by'] = tData.created_by;
+		if (tData.creation_date)
+			tData['creation date'] = tData.creation_date;
 		tData.info['piece length'] = tData.info.piece_length;
 
 		tData.info = _.omit(tData.info, 'piece_length');
