@@ -22,7 +22,7 @@ exports.doAction = function(req, res){''
 		req.data = jReq;
 		routes.actions[jReq.action](req, res);
 	}catch(err){
-		console.log(err)
+		console.log(err);
 		res.json({
 			error: {
 				message: err,

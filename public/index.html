@@ -1,12 +1,24 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="/css/flat-ui.css">
 		<link rel="stylesheet" type="text/css" href="/css/style.css">
-	</head>
+        <link rel="stylesheet" type="text/css" href="/css/flat-ui.css">
+
+        <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="/js/lib/jquery-ui-1.10.3.custom.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/lib/underscore-1.4.4.js"></script>
+        <script type="text/javascript" src="/js/lib/json2.js"></script>
+        <script type="text/javascript" src="/js/lib/backbone-1.0.0.js"></script>
+        <script type="text/javascript" src="/js/lib/backbone-form/backbone-forms.min.js"></script>
+        <script type="text/javascript" src="/js/lib/backbone-form/adapters/backbone.bootstrap-modal.js"></script>
+        <script type="text/javascript" src="/js/lib/backbone-deep-model-0.10.1.js"></script>
+        <script type="text/javascript" src="/js/lib/backbone-form/editors/list.min.js"></script>
+        <script type="text/javascript" src="/backbone/torrent.js"></script>
+    </head>
 	<body>
 		<div class="container">
-			Signup:
+			<!--Signup:-->
 	<!-- 		<form action="/signup" method="post">
 				<label for="inp_name">name</label> <input id="inp_name" type="text" name="name" />
 				<label for="inp_mail">email</label> <input id="inp_mail" type="text" name="email" />
@@ -15,39 +27,17 @@
 			</form>
  -->
 			<form action="/"  method="post">
-				<textarea rows="7" cols='100' name="data">
+				<textarea rows="5" cols='500' name="data">
 				</textarea>
 				<button type="submit"> Send </button>
 			</form>
 
 			<form action="/" method="post" enctype="multipart/form-data">
-				<input name="torrent_file" type="file">Upload</input>
-				<input name="submit" type="submit"/>
-				<input name="data" type="hidden" value='{"action":"torrent_upload", "form": {"name":"sth", "tags":["asdf", "ad"]}}' />
-			</form>
-
-			<form action="/" method="post">
-				<input name="data" type="hidden" value='{
-"action" : "user_signin",
-"form":  {
-"name": "mamad",
-"email": "mamad@gmail.com",
-"password": "123"
-}
-}'>  </input>
-			<input type="submit"> Signin</input>
-			</form>
-			<form action="/" method="post">
-				<input name="data" type="hidden" value='
-{
-"action":"torrent_download",
-"form":{
- "torrent_id":"94c11550bdc5d2117da3e22aed302108380aa9ec"
- }
-}'>  </input>
-			<input type="submit"> Download</input>
+				<input name="torrent_file" type="file" >
+				<input name="submit" type="submit" value="Upload"/>
+				<input name="data" type="hidden" value='' />
 			</form>
 
 		</div>
-	</body>
+    </body>
 </html>

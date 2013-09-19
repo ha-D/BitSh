@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/css/flat-ui.css">
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+	</head>
+	<body>
+		<div class="container">
+			Signup:
+	<!-- 		<form action="/signup" method="post">
+				<label for="inp_name">name</label> <input id="inp_name" type="text" name="name" />
+				<label for="inp_mail">email</label> <input id="inp_mail" type="text" name="email" />
+				<label for="inp_pass">pass</label> <input id="inp_pass" type="password" name="password" />
+				<button type="submit"> sign up </button>
+			</form>
+ -->
+			<form action="/"  method="post">
+				<textarea rows="7" cols='100' name="data">
+				</textarea>
+				<button type="submit"> Send </button>
+			</form>
+
+			<form action="/" method="post" enctype="multipart/form-data">
+				<input name="torrent_file" type="file">Upload</input>
+				<input name="submit" type="submit"/>
+				<input name="data" type="hidden" value='{"action":"torrent_upload", "form": {"name":"sth", "tags":["asdf", "ad"]}}' />
+			</form>
+
+			<form action="/" method="post">
+				<input name="data" type="hidden" value='{
+"action" : "user_signin",
+"form":  {
+"name": "mamad",
+"email": "mamad@gmail.com",
+"password": "123"
+}
+}'>  </input>
+			<input type="submit"> Signin</input>
+			</form>
+			<form action="/" method="post">
+				<input name="data" type="hidden" value='
+{
+"action":"torrent_download",
+"form":{
+ "torrent_id":"94c11550bdc5d2117da3e22aed302108380aa9ec"
+ }
+}'>  </input>
+			<input type="submit"> Download</input>
+			</form>
+
+		</div>
+	</body>
+</html>
