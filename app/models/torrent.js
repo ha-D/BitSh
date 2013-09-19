@@ -1,6 +1,7 @@
-var mongoose = require('mongoose')
-  , Schema   = mongoose.Schema
-  , ObjectId = Schema.ObjectId
+var mongoose   = require('mongoose')
+  , textSearch = require('mongoose-text-search')
+  , Schema     = mongoose.Schema
+  , ObjectId   = Schema.ObjectId
 
 var TorrentSchema = new Schema({
 	_id: String,
@@ -24,8 +25,11 @@ var TorrentSchema = new Schema({
 		},
 		text: String
 	}],
-	torrent: {type: String, ref: 'TorrentData'}
+	torrent_data: {type: String, ref: 'TorrentData'}
 });
+
+TorrentSchema.plugin(textSearch);
+TorrentSchema.index({name: "text", tags: "text"})
 
 mongoose.model('Torrent', TorrentSchema)
 

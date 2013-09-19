@@ -8,11 +8,12 @@
 	},
 	"dependencies": {
 		"express": "3.3.8",
-		"mongoose": "latest",
+		"mongoose": "3.6.19",
 		"connect-mongo": "latest",
-		"underscore": "latest",
+		"underscore": "1.5.2",
 		"bencode": "latest",
-		"winston": "latest"
+		"winston": "0.7.2",
+		"mongoose-text-search": "latest"
 	},
 	"devDependencies": {
     	"nodemon": "latest"

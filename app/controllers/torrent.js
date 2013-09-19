@@ -36,7 +36,7 @@ exports.upload = function(req, res){
 
 		var torrent = {
 			 _id: infoHash,
-			torrent: infoHash,
+			torrent_data: infoHash,
 
 			name: form.name,
 			//category: req.data.form.category    // TODO CHANGE
@@ -86,7 +86,7 @@ exports.download = function(req, res){
 			return;
 		}
 
-		announce = "http://213.233.181.196:8080/tracker/announce/" + req.session.userId;
+		announce = "http://213.233.170.224:8080/tracker/announce/" + req.session.userId;
 
 		tData.info.pieces = tData.info.pieces.buffer;
 
@@ -104,5 +104,45 @@ exports.download = function(req, res){
 		res.set('Content-disposition' , 'inline; filename="' + tData.info.name + '.torrent"');
 		res.set('Content-type', 'application/x-bittorrent');
 		res.send(Bencode.encode(tData));
+	});
+}
+
+exports.list = function(req, res){
+	if (!checkUser('torrent_list', req, res))
+		return;
+
+	var form = req.data.form;
+	
+	var jRes = {
+		action: 'torrent_list',
+		user: {
+			_id: req.session.userId
+		}
+	}
+
+	options = {
+		project: '-comments -torrent_data -__v',
+		filter: {},
+		limit: 1000
+	}
+
+	if (form.tags)
+		options.filter.tags = { $all: form.tags }
+
+	/* TODO Category */
+
+	/* TODO Sort (order_by) */
+
+	Torrent
+	.textSearch(form.search_text, options, function(err, result){
+		if (err){
+			jRes.state = "failed";
+			jRes.error = err.toString();
+			res.json(jRes);
+			return;
+		}
+
+		jRes.torrents = _.pluck(result.results, 'obj');
+		res.json(jRes);
 	});
 }

@@ -101,7 +101,8 @@ function makePeerList(req, res, peers){
 		});
 	}
 
-	logger.debug("announce [%d] sending %d peers", req.requestId, peers.length);
+	logger.debug('announce [%d] sending %d peers %s', req.requestId, peers.length,
+		req.query.compact == 1 ? 'in compact form' : '');
 	return formatedPeers;
 }
 
@@ -287,8 +288,8 @@ exports.announce = function(req, res){
 	var announceHandler = announceErrorWrapper(req, res, function(){
 		validateQuery(req, res);
 
-		logger.info('announce [%d] recieved (ip: %s, user: %s, peer_id: %s, info_hash: %s)', 
-			requestCount, req.query.ip, req.query.userId, req.query.peer_id, req.query.info_hash);
+		logger.info('announce [%d] recieved (ip: %s, port: %s, user: %s, peer_id: %s, info_hash: %s)', 
+			requestCount, req.query.ip, req.query.port, req.query.userId, req.query.peer_id, req.query.info_hash);
 
 		req.requestId = requestCount++;
 

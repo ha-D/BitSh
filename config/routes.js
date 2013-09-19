@@ -19,7 +19,8 @@ exports.actions = {
 	'user_signout': user.signout,
 	'user_info':    user.userInfo,
 	'torrent_upload': torrent.upload,
-	'torrent_download': torrent.download
+	'torrent_download': torrent.download,
+	'torrent_list': torrent.list
 }
 
 module.exports = exports
