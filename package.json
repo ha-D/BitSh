@@ -13,7 +13,8 @@
 		"underscore": "1.5.2",
 		"bencode": "latest",
 		"winston": "0.7.2",
-		"mongoose-text-search": "latest"
+		"mongoose-text-search": "latest",
+		"mkdirp": "latest"
 	},
 	"devDependencies": {
     	"nodemon": "latest"

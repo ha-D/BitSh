@@ -1,12 +1,13 @@
-var Torrent  = require('../models/torrent')
-  , Peer     = require('../models/peer')
-  , User 	 = require('../models/user')
-  , UTStatus = require('../models/utstatus')
-  , Bencode  = require('bencode')
+var Torrent  = require('../../models/torrent')
+  , Peer     = require('../../models/peer')
+  , User 	 = require('../../models/user')
+  , UTStatus = require('../../models/utstatus')
+  , zutil	 = require('../util')
+  , logger   = require('../settings/log')
+  
+var Bencode  = require('bencode')
   , _        = require('underscore')
   , util 	 = require('util')
-  , zutil	 = require('../../lib/util')
-  , logger   = require('../../lib/log')('tracker')
 
 /*	TODO
     
@@ -284,7 +285,7 @@ function validateQuery(req, res){
 }
 
 exports.announce = function(req, res){	
-
+	console.log("SOMETING")
 	var announceHandler = announceErrorWrapper(req, res, function(){
 		validateQuery(req, res);
 

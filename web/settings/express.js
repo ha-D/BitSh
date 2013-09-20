@@ -7,7 +7,7 @@ var express = require('express')
   , mongoStore = require('connect-mongo')(express)
   // , flash = require('connect-flash')
   // , helpers = require('view-helpers')
-  , pkg = require('../package.json')
+  , pkg = require('../../package.json')
 
 module.exports = function (app, config) {
 
@@ -21,7 +21,7 @@ module.exports = function (app, config) {
   }))
 
   app.use(express.favicon())
-  app.use(express.static(config.public_root))
+  app.use(express.static(config.publicRoot))
 
   // don't use logger for test env
   // if (process.env.NODE_ENV !== 'test') {
@@ -29,7 +29,7 @@ module.exports = function (app, config) {
   // }
 
   // set views path, template engine and default layout
-  app.set('views', config.root + '/app/views')
+  // app.set('views', config.root + '/app/views')
   // app.set('view engine', 'ejs')
 
   app.configure(function () {
@@ -54,28 +54,6 @@ module.exports = function (app, config) {
         collection : 'sessions'
       })
     }))
-
-    // use passport session
-    // app.use(passport.initialize())
-    // app.use(passport.session())
-
-    // connect flash for flash messages - should be declared after sessions
-    // app.use(flash())
-
-    // should be declared after session and flash
-    // app.use(helpers(pkg.name))
-
-    // adds CSRF support
-    // if (process.env.NODE_ENV !== 'test') {
-      // app.use(express.csrf())
-    // }
-
-    // This could be moved to view-helpers :-)
-
-    // app.use(function(req, res, next){
-    //   res.locals.csrf_token = req.session._csrf
-    //   next()
-    // })
 
     // routes should be at the last
     app.use(app.router)

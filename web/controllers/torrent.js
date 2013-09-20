@@ -1,7 +1,8 @@
-var Torrent 	= require('../models/torrent')
-  , TorrentData = require('../models/torrentdata')
+var Torrent 	= require('../../models/torrent')
+  , TorrentData = require('../../models/torrentdata')
   , UserCtrl    = require('./user')
   , checkUser   = UserCtrl.checkUser
+  , config		= require('../../config')
 
 var Bencode		= require('bencode')
   , fs 			= require('fs')
@@ -86,7 +87,7 @@ exports.download = function(req, res){
 			return;
 		}
 
-		announce = "http://213.233.170.224:8080/tracker/announce/" + req.session.userId;
+		announce = config.tracker.url + 'announce/' + req.session.userId;
 
 		tData.info.pieces = tData.info.pieces.buffer;
 

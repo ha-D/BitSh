@@ -1,15 +1,12 @@
 
-var main = require("../app/controllers/main")
-  , user = require("../app/controllers/user")
-  , tracker = require("../app/controllers/tracker")
-  , torrent = require("../app/controllers/torrent")
-  , test  = require("../app/controllers/test")
+var main = require("../controllers/main")
+  , user = require("../controllers/user")
+  , torrent = require("../controllers/torrent")
+  , test  = require("../controllers/test")
 
 exports.init = function(app){
 	app.get('/', main._index);
 	app.post('/', main.doAction);
-	app.get('/tracker/announce/:userId', tracker.announce);
-	app.get('/tracker/announce', tracker.announce)
 }
 
 exports.actions = {

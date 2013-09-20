@@ -1,4 +1,4 @@
-var User = require("../models/user")
+var User = require("../../models/user")
 
 /**
  * Checks if user is signed in. Returns true if it is, if not returns false

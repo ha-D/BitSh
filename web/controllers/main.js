@@ -1,10 +1,10 @@
 var path   = require('path')
-var config = require('../../config/config')
+var config = require('../../config')
 var user   = require('./user')
-var routes = require('../../config/routes')
+var routes = require('../settings/routes')
 
 exports._index = function(req, res){
-	res.sendfile(config.public_root + '/index.html');
+	res.sendfile(config.publicRoot + '/index.html');
 }
 
 exports.doAction = function(req, res){''
