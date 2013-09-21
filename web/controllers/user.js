@@ -27,7 +27,7 @@ exports.userInfo = function(req, res){
 
 	jRes = {
 		action: "user_info"
-	}
+	};
 
 	user = User.findOne({'_id': req.session.userId}, function(err, result){
 		if (err) {
@@ -44,10 +44,10 @@ exports.userInfo = function(req, res){
 		
 		res.json(jRes);
 	});
-}
+};
 
 exports.signup = function(req, res){
-	user = new User(req.data.form)
+	user = new User(req.data.form);
 	user.save(function(err){
 		if(err){
 			res.json({
@@ -82,6 +82,8 @@ exports.signin = function(req, res){
 
 	email = req.data.form.email;
 	pass  = req.data.form.password;
+
+    console.log(req.data);
 
 	User.findOne({ 'email': email }, function(err, user){
 		if (user == null || !user.authenticate(pass)){
