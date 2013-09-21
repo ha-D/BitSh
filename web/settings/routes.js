@@ -6,6 +6,7 @@ var main = require("../controllers/main")
 
 exports.init = function(app){
 	app.get('/', main._index);
+	app.get('/test', main.test);
 	app.post('/', main.doAction);
 }
 

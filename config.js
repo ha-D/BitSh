@@ -2,7 +2,8 @@ var path = require('path')
 
 var root_path = path.normalize(__dirname) + '/';
 
-var siteUrl = 'http://localhost';
+//var siteUrl = 'http://localhost';
+var siteUrl = 'http://213.233.171.252';
 var logPath = './logs/';
 
 config = {

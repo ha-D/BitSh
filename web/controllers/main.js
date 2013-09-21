@@ -4,7 +4,11 @@ var user   = require('./user')
 var routes = require('../settings/routes')
 
 exports._index = function(req, res){
-	res.sendfile(config.publicRoot + '/index.html');
+	res.sendfile(config.publicRoot + 'index.html');
+}
+
+exports.test = function(req, res){
+	res.sendfile(config.publicRoot + 'first-index.html');
 }
 
 exports.doAction = function(req, res){''
