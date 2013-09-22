@@ -1,17 +1,43 @@
 var validators = {};
 validators['required'] = {type: 'required', message: 'این فیلد الزامی است.'};
 
+function onSubmitSignUpSubmit(){
+    var that = this;
+    name = this.$('input[name=new_name]').val();
+    email = this.$('input[name=new_email]').val();
+    password = this.$('input[name=new_password]').val();
+    console.log(password);
+    data = {
+            "action": "user_signup",
+            "form": {
+                "name": name,
+                "email": email,
+                "password": password
+            }
+        };
+    console.log(data);
+        data_json = JSON.stringify(data);
+        $.ajax({
+            url: "/",
+            data: {data: data_json},
+            type: 'POST',
+            success: function(data) {
+                if(data.state=="fail"){
+                    error = data.error.message;
+                    alert(error);
+                }
+                else{
+                }
+            },
+            error: function(data) {
+                error = data.error.message;
+                alert(error);
+                that.errorSaving(data);
+            }
+        });
+    $.fancybox.close();
+};
 
-var signUpmodal = new Backbone.BootstrapModal({
-    content: 'Please Sign up:\
-                            name: <input name="name" type="text" value="" />\
-                            email: <input name="email" type="text" value="" />\
-                            password: <input name="password" type="password" value="" />',
-    title:"new user",
-    okText:"ok",
-    cancelText:'cancel',
-    animate:'true'
-});
 
 var LoginStatus = Backbone.Model.extend({
 
@@ -46,12 +72,13 @@ var LoginStatus = Backbone.Model.extend({
 var AppView = Backbone.View.extend({
 
     _loggedInTemplate: _.template('<p>Welcome <%= escape(\'username\') %>!</p>\
-        <button name="signin" id="signin" type="submit">signin</button>\
         <button name="signout" id="signout" type="submit">signout</button>'),
     _notLoggedInTemplate: _.template('<form class="login-form">\
                             username: <input name="username" type="text" value="" />\
                             password: <input name="password" type="password" value="" />\
-                            <button  type="submit">Login</button>\
+                            <button  type="submit">SignIn</button>\
+                            <button name="signup" id="signup" type="submit">SignUp</button>\
+                            <button name="signout" id="signout" type="submit">signout</button>\
         <p><%= escape(\'error\') %></p></form>'),
 
     initialize: function () {
@@ -59,9 +86,9 @@ var AppView = Backbone.View.extend({
     },
 
     events: {
-        'submit .login-form': 'onApiKeySubmit',
+        'submit .login-form': 'onSignInSubmit',
         'click #signout':'onSignOutKey',
-        'click #signin':'onSignInKey'
+        'click #signup':'onSignUpKey'
     },
 
     onSignOutKey: function(e){
@@ -85,29 +112,27 @@ var AppView = Backbone.View.extend({
         });
     },
 
-    onSignInKey: function(e){
-        signUpmodal.open();
-        signUpmodal.on('ok', function() {
-            var that = this;
-            e.preventDefault();
-            data = {
-                "action": "user_signout"
-            };
-            data_json = JSON.stringify(data);
-            $.ajax({
-                url: "/",
-                data: {data: data_json},
-                type: 'POST',
-                success: function(data) {
-                },
-                error: function(data) {
-                    that.errorSaving(data);
-                }
-            });
+    onSignUpKey: function(e){
+        $("#signup").fancybox({
+            title : 'New User',
+            padding : [20,20,20,20],
+            content: 'Please Sign up:<br><br>\
+                        <form class="signup-form" action="javascript:onSubmitSignUpSubmit();">\
+                            Name &nbsp &nbsp &nbsp <input name="new_name" type="text" value="" /><br>\
+                            Email &nbsp &nbsp &nbsp <input name="new_email" type="text" value="" /><br>\
+                            Password <input name="new_password" type="password" value="" />\
+                            <button name="signup-submit"  id="signup-submit" type="submit">ok</button></form>',
+            maxWidth	: 800,
+            maxHeight	: 600,
+            fitToView	: true,
+            width		: '50%',
+            height		: '30%',
+            autoSize	: false
         });
     },
 
-    onApiKeySubmit: function(e){
+
+    onSignInSubmit: function(e){
         var that = this;
         e.preventDefault();
         username = this.$('input[name=username]').val();
@@ -200,10 +225,7 @@ var TorrentsView = Backbone.View.extend({
         data = {
             'action': "torrent_list",
             'form': {
-                "search_text": "",
-                "category": "",
-                    "tags": [],
-                        "orderby":""}
+                "search_text": "sad"}
                             };
         data_json = JSON.stringify(data);
             $.ajax({
