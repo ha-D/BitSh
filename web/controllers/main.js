@@ -8,7 +8,7 @@ exports._index = function(req, res){
 }
 
 exports.test = function(req, res){
-	res.sendfile(config.publicRoot + 'first-index.html');
+	res.sendfile(config.publicRoot + 'test.html');
 }
 
 exports.doAction = function(req, res){''
