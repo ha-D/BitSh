@@ -2,15 +2,13 @@ body{
 	background-color: #dddddd;
 }
 .container{
-	/*box-shadow: 1px 1px 1px 1px #888888;*/
 	border-radius: 4px;
-	margin-top: 50px;
-	max-width: 1024px;	
+	margin-top: 20px;				/* Top Gap */
+	max-width: 1324px;				/* Page Width */
 }
-.main{
+.inner-container{
 	background-color: #eeeeee;
 	border-radius: 4px;
-	/*border: 1px 1px 1px 1px;*/
 	border-width: 1px;
 	border-color: #aaaaaa;
 	box-shadow: 1px 1px 1px 1px #888888;
@@ -18,11 +16,32 @@ body{
 }
 
 .navbar{
-	margin-bottom: 2px;
+	margin-bottom: 0px;
+	padding-top: 0px;			   /* Navbar size */
+	padding-bottom: 0px;
+	z-index: 0;
+}
+
+.navbar .collapse{
+	padding-top: 15px;
 }
 
 .navbar-brand{
 	margin-right: 20px;
+	padding-left: 8px;
+	padding-bottom: 12px;
+	/*font-size: 14px;			/* Logo Size */*/
+}
+
+.navbar-brand pre{
+	margin-right: 20px;
+	margin-bottom: 0px;
+	font-size: 9px;			/* Logo Size */
+	font-weight: bold;
+	line-height: 1;
+	background-color: transparent;;
+	border: none;
+	padding: 0px;
 }
 
 .btn-search{
@@ -63,6 +82,7 @@ body{
 	border-radius: 5px;
 	min-width: 280px;
 	padding: 15px 20px 10px 20px;
+	background-color: rgba(255, 255, 255, 0.5);
 	/*position: relative;*/
 	/*background: #88b7d5;*/
 	/*border: 4px solid #c2e1f5;*/
@@ -94,15 +114,66 @@ body{
 	margin-left: -13px;
 }
 
-#login-box h4{
+#login-box h4 {
 	margin-bottom: 20px;
 }
 
-#login-box button{
+#login-box button {
 	margin-bottom: 20px;
 	margin-top: 10px;
 }
 
-#login-box #btn-signin{
+#login-box #btn-signin {
 	margin-top: 15px;
+}
+
+.main {
+	padding-left: 15px;
+}
+
+.cat-list {
+	padding-left: 0px;
+	padding-right: 0px;			/* Left Bar Size */
+	min-width: 125px;
+	margin-top: -1px;
+
+	z-index: 1;
+}
+
+.cat-list .list-group{
+	padding-top: 40px;
+	padding-bottom: 100%;
+	height: 500px;
+	margin-bottom: 0px;
+	background-color: #f8f8f8;
+
+	border-right: 1px solid rgb(221, 221, 221);
+	border-left: 1px solid rgb(221, 221, 221);
+}
+
+.cat-list .list-group-item{
+	border-right: none;
+	border-left: none;
+	border-radius: 0px;
+	background-color: transparent;
+	color: rgb(80, 80, 80);
+}
+
+.cat-list .list-group-item:hover{
+	background-color: rgb(231, 231, 231);
+	cursor: hand;
+}
+
+.cat-list .list-group-item:active{
+	-moz-box-shadow:    inset 1px 0px 30px rgb(171, 171, 171);
+	-webkit-box-shadow: inset 1px 0px 30px rgb(171, 171, 171);
+	box-shadow:         inset 1px 0px 30px rgb(171, 171, 171);
+
+	background-color: rgb(231, 231, 231);
+	cursor: hand;
+}
+
+.cat-list .category {
+	margin-right: 10px;
+	padding-bottom: 0px;
 }

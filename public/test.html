@@ -1,7 +1,7 @@
 <html>
 <head>
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap-combined.min.css" rel="stylesheet">
+    <!-- <link href="bootstrap/css/bootstrap-combined.min.css" rel="stylesheet"> -->
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="css/teststyle.css"/>
     <link rel="stylesheet" href="css/jquery.fancybox-thumbs.css" type="text/css" media="screen" />
@@ -9,11 +9,19 @@
 </head>
 <body>
 	<div class="container">
-	    <div class="main">
+	    <div class="inner-container">
 	        <nav class="navbar navbar-default" role="navigation">
 	            <!-- Brand and toggle get grouped for better mobile display -->
 	            <div class="navbar-header">
-	                <a class="navbar-brand" href="#">BitSh</a>
+	                <a class="navbar-brand" href="#">
+	                	<pre>
+  ___ _ _   ___ _  _ 
+ | _ (_| |_/ __| || |
+ | _ | |  _\__ | __ |
+ |___|_|\__|___|_||_|
+                </pre>
+                       
+	                </a>
 	            </div>
 
 	            <!-- Collect the nav links, forms, and other content for toggling -->
@@ -26,22 +34,10 @@
 	                    </div>
 	                    <button type="submit" class="btn-search"><span class="glyphicon glyphicon-search"></span></button>
 	                </form>
-	                <form class="navbar-form navbar-left">
-
-	                    <div class="btn-group">
-	                        <button type="button" class="btn-cat btn btn-default"><span
-	                                class="category glyphicon glyphicon-film"></span></button>
-	                        <button type="button" class="btn-cat btn btn-default"><span
-	                                class="category glyphicon glyphicon-headphones"></span></button>
-	                        <button type="button" class="btn-cat btn btn-default"><span
-	                                class="category glyphicon glyphicon-book"></span></button>
-	                    </div>
-
-	                </form>
-
+	              
 	                <ul class="nav navbar-nav navbar-right">
 	                    <li class="dropdown">
-	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span
+	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
 	                                class="category glyphicon glyphicon-user"></span></a>
 
 	                       <div class="dropdown-menu" id="login-box">
@@ -66,16 +62,30 @@
 	            </div>
 	        </nav>
 
-	        <div class="torlist">
-	            <table class="table">
-	                <tr>
-	                    <th> Name</th>
-	                </tr>
-	            </table>
-	            <div id="paginator"></div>
-	        </div>
+	        <div class="row main">
+		        <div class="col-md-1 cat-list">
+		        	<div class="list-group">
+		        		<a class="list-group-item"> <span class="category glyphicon glyphicon-film"></span> Video </a>
+		        		<a class="list-group-item"><span class="category glyphicon glyphicon-headphones"></span> Music</a>
+		        		<a class="list-group-item"><span class="category glyphicon glyphicon-book"></span> Books</a>
+	        		</div>
+		        </div>
+
+		        <div class="col-md-10">
+		        	<div class="torlist">
+			            <table class="table">
+			                <tr>
+			                    <th> Name</th>
+			                </tr>
+			            </table>
+			            <div id="paginator"></div>
+			        </div>
+		        </div>
+		    </div
 	    </div>
 	</div>
+
+
 <script src="bootstrap/js/jquery-1.8.3.min.js"></script>
 <script src="bootstrap/js/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="bootstrap/js/jquery.ui.touch-punch.min.js"></script>
