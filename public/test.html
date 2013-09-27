@@ -7,75 +7,87 @@
 
 	    <link rel="shortcut icon" href="images/favicon.ico">
 
-	<link rel="stylesheet" type="text/css" href="css/teststyle.css" />
+		<link rel="stylesheet" type="text/css" href="css/teststyle.css" />
 </head>
 
 <body>
 	<div class="container">
 		<div class="main">
-		<!-- <h2>BitSh</h2> -->
-		<nav class="navbar navbar-default" role="navigation">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#">BitSh</a>
-		</div>
+	
+			<nav class="navbar navbar-default" role="navigation">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">BitSh</a>
+				</div>
 
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse navbar-ex1-collapse">
-		<ul class="nav navbar-nav">
-		</ul>
-		<form class="navbar-form navbar-left" role="search">
-		  <div class="form-group">
-		    <input type="text" class="txt-search form-control" placeholder="Search">
-		  </div>
-		  <button type="submit" class="btn-search"><span class="glyphicon glyphicon-search"></span></button>
-		</form>
-		<form class="navbar-form navbar-left">
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+					<ul class="nav navbar-nav">
+					</ul>
+					
+					<form class="navbar-form navbar-left" role="search">
+					  <div class="form-group">
+					    <input type="text" class="txt-search form-control" placeholder="Search">
+					  </div>
+					  <button type="submit" class="btn-search"><span class="glyphicon glyphicon-search"></span></button>
+					</form>
 
-		<div class="btn-group">
-		  <button type="button" class="btn-cat btn btn-default"><span class="category glyphicon glyphicon-film"></span></button>
-		  <button type="button" class="btn-cat btn btn-default"><span class="category glyphicon glyphicon-headphones"></span></button>
-		  <button type="button" class="btn-cat btn btn-default"><span class="category glyphicon glyphicon-book"></span></button>
-		</div>
+					<form class="navbar-form navbar-left">
+						<div class="btn-group">
+						  <button type="button" class="btn-cat btn btn-default"><span class="category glyphicon glyphicon-film"></span></button>
+						  <button type="button" class="btn-cat btn btn-default"><span class="category glyphicon glyphicon-headphones"></span></button>
+						  <button type="button" class="btn-cat btn btn-default"><span class="category glyphicon glyphicon-book"></span></button>
+						</div>
+					</form>
 
-		</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="category glyphicon glyphicon-user"></span></b></a>
+							<div class="dropdown-menu" id="login-box">
+								<h4> Login </h4>
+								<form role="form">
+									<div class="form-group">
+										<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+									</div>
+									<div class="form-group">
+										<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+									</div>
+									<div class="checkbox">
+								  		<input type="checkbox" id="rememberMe"> <label for="rememberMe"> Remember me<label>
+									</div>
+									<button type="submit" id="btn-signin" class="btn btn-primary btn-block">Sign in</button>
+									<small>Don't have an account?</small>
+									<button class="btn btn-success btn-block">Sign up</button>
+								</form>				    
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			
+			<div class="torlist">
+				<div class="arrow_box">
+					hello there
+				</div>
+				<table class="table">
+					<tr>
+						<th> Name </th>
+						<th> Size </th>
+					</tr>
+					<tr>
+						<td> Breaking Bad </td>
 
-		<ul class="nav navbar-nav navbar-right">
-		  <li class="dropdown">
-		    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="category glyphicon glyphicon-user"></span></b></a>
-		    <ul class="dropdown-menu">
-		      <li><a href="#">Action</a></li>
-		      <li><a href="#">Another action</a></li>
-		      <li><a href="#">Something else here</a></li>
-		      <li><a href="#">Separated link</a></li>
-		    </ul>
-		  </li>
-		</ul>
-		</div><!-- /.navbar-collapse -->
-		</nav>
-		
-		<div class="torlist">
-			<table class="table">
-				<tr>
-					<th> Name </th>
-					<th> Size </th>
-				</tr>
-				<tr>
-					<td> Breaking Bad </td>
-
-				</tr>
-			</table>
-		</div>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
-	<script src="js/jquery-1.8.3.min.js"></script>
-    <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="js/jquery.ui.touch-punch.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap-select.js"></script>
-    <script src="js/bootstrap-switch.js"></script>
-    <script src="js/flatui-checkbox.js"></script>
-    <script src="js/flatui-radio.js"></script>
-    <script src="js/jquery.tagsinput.js"></script>
+	<script src="bootstrap/js/jquery-1.8.3.min.js"></script>
+    <script src="bootstrap/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="bootstrap/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/bootstrap-select.js"></script>
+    <script src="bootstrap/js/bootstrap-switch.js"></script>
+    <script src="bootstrap/js/jquery.tagsinput.js"></script>
 </body>
 </html>
