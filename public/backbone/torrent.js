@@ -76,14 +76,15 @@ var UserView = Backbone.View.extend({
         <input class="btn btn-primary btn-sm" style="clear: left;  height: 30px; font-size: 12px;" id="signout" type="submit" name="signout" value="Sign Out"/>'),
     _notLoggedInTemplate:_.template(
         '<form class="login-form">\
-            <div class="input-group">\
-                <input type="text" style="margin-bottom: 10px;" class="form-control" placeholder="username" name="username">\
+            <div class="form-group">\
+                <input type="email" style="margin-bottom: 10px;" class="form-control" placeholder="Email" name="username">\
                 <input id="password" style="margin-bottom: 10px;" type="password" class="form-control" placeholder="password" name="password"/>\
             </div>\
             <input id="remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1"/>\
             <label class="string optional" for="remember_me"> Remember me</label><br>\
-            <input class="btn btn-primary btn-sm" style="clear: left;  height: 30px; font-size: 12px;" type="submit" name="commit" value="Sign In"/>\
-            <input class="btn btn-primary btn-sm" style="clear: left; height: 30px; font-size: 12px;" type="submit" name="signup" id="signup" value="Sign up"/></form>'),
+            <input class="btn btn-primary btn-block" style="clear: left;  height: 30px; font-size: 12px;" type="submit" name="commit" value="Sign In"/>\
+            <small>Don\'t have an account?</small>\
+            <input class="btn btn-success btn-block" style="clear: left; height: 30px; font-size: 12px;" type="submit" name="signup" id="signup" value="Sign up"/></form>'),
 
     initialize:function () {
         this.model.bind('change:loggedIn', this.render, this);
@@ -247,7 +248,7 @@ var TorrentsView = Backbone.View.extend({
 
 var TorrentView = Backbone.View.extend({
     tagName:"tr",
-    template:_.template('<td><a class="tor"><%= name %></a>\
+    template:_.template('<td><a href="#download/1" class="tor"><%= name %></a>\
                         <p style="display: NONE;">\
                         category: <%= category %> - \
                         tags: <%= tags %> - \
@@ -262,8 +263,7 @@ var TorrentView = Backbone.View.extend({
 
 var formCollection = null;
 $(document).ready(function () {
-    var view = new UserView({model:new LoginStatus()});
-    $(".login-menu").append(view.render().el);
+    
 
     formCollection = new torrent_FormCollection([
         {
@@ -284,42 +284,40 @@ $(document).ready(function () {
     var torrentView = new TorrentsView({ collection:formCollection});
     $(".table").append(torrentView.render().el);
 
-//    window.App = {
-//        Models: {},
-//        Collections: {},
-//        Views: {},
-//        Router: {}
-//    };
-//
-//    App.Router = Backbone.Router.extend({
-//        routes: {
-//            '': 'index',
-//            'show/:id': 'show',
-//            'download/*random': 'download',
-//            'search/:query': 'search',
-//            '*other': 'default'
-//        },
-//
-//        index: function() {
-//            $(document.body).append("Index route has been called..");
-//        },
-//
-//        show: function(id) {
-//            $(document.body).append("Show route has been called.. with id equals : " + id);
-//        },
-//
-//        download: function(random) {
-//            $(document.body).append("download route has been called.. with random equals : " + random);
-//        },
-//
-//        search: function(query) {
-//            $(document.body).append("Search route has been called.. with query equals : " + query);
-//        }
-//
-//    });
-//
-//    new App.Router;
-//    Backbone.history.start();
+    var view = new UserView({model:new LoginStatus()});
+    $(".login-menu").append(view.render().el);
+
+    window.App = {
+        Models: {},
+        Collections: {},
+        Views: {},
+        Router: {}
+    };
+
+    App.Router = Backbone.Router.extend({
+        routes: {
+            '': 'index',
+            'download/:id': 'download',
+            'search/:query': 'search',
+            '*other': 'default'
+        },
+
+        index: function() {
+            $(document.body).append("Index route has been called..");
+        },
+
+        download: function(id) {
+            $(document.body).append("download route has been called.. torrent id : " + id);
+        },
+
+        search: function(query) {
+            $(document.body).append("Search route has been called.. with query equals : " + query);
+        }
+
+    });
+
+    new App.Router;
+    Backbone.history.start();
 });
 
 
